@@ -138,7 +138,7 @@ namespace
 
     template<typename... T>
     std::array<char, 32> operator()(const T&... args) const
-    {      
+    {
       md5::MD5_CTX ctx{};
       md5::MD5Init(std::addressof(ctx));
       boost::fusion::for_each(std::tie(args...), update{ctx});
@@ -448,18 +448,18 @@ namespace
           };
 
           field_table.add
-            (u8"algorithm", std::bind(parse_token{}, _1, _2, _3, std::bind(&auth_message::algorithm, _4)))
-            (u8"cnonce", std::bind(parse_string{}, _1, _2, _3, std::bind(&auth_message::cnonce, _4)))
-            (u8"domain", std::bind(parse_string{}, _1, _2, _3)) // ignore field
+            (u8"algorithm", std::bind(parse_token{}, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, std::bind(&auth_message::algorithm, boost::placeholders::_4)))
+            (u8"cnonce", std::bind(parse_string{}, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, std::bind(&auth_message::cnonce, boost::placeholders::_4)))
+            (u8"domain", std::bind(parse_string{}, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3)) // ignore field
             (u8"nc", parse_nc{})
-            (u8"nonce", std::bind(parse_string{}, _1, _2, _3, std::bind(&auth_message::nonce, _4)))
-            (u8"opaque", std::bind(parse_string{}, _1, _2, _3, std::bind(&auth_message::opaque, _4)))
-            (u8"qop", std::bind(parse_token{}, _1, _2, _3, std::bind(&auth_message::qop, _4)))
-            (u8"realm", std::bind(parse_string{}, _1, _2, _3, std::bind(&auth_message::realm, _4)))
+            (u8"nonce", std::bind(parse_string{}, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, std::bind(&auth_message::nonce, boost::placeholders::_4)))
+            (u8"opaque", std::bind(parse_string{}, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, std::bind(&auth_message::opaque, boost::placeholders::_4)))
+            (u8"qop", std::bind(parse_token{}, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, std::bind(&auth_message::qop, boost::placeholders::_4)))
+            (u8"realm", std::bind(parse_string{}, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, std::bind(&auth_message::realm, boost::placeholders::_4)))
             (u8"response", parse_response{})
-            (u8"stale", std::bind(parse_token{}, _1, _2, _3, std::bind(&auth_message::stale, _4)))
-            (u8"uri", std::bind(parse_string{}, _1, _2, _3, std::bind(&auth_message::uri, _4)))
-            (u8"username", std::bind(parse_string{}, _1, _2, _3, std::bind(&auth_message::username, _4)));
+            (u8"stale", std::bind(parse_token{}, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, std::bind(&auth_message::stale, boost::placeholders::_4)))
+            (u8"uri", std::bind(parse_string{}, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, std::bind(&auth_message::uri, boost::placeholders::_4)))
+            (u8"username", std::bind(parse_string{}, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, std::bind(&auth_message::username, boost::placeholders::_4)));
 
           skip_whitespace = *(&qi::ascii::char_ >> qi::ascii::space);
           header = skip_whitespace >> qi::ascii::no_case[u8"digest"] >> skip_whitespace;
@@ -471,9 +471,9 @@ namespace
         }
 
         boost::optional<auth_message> operator()(const boost::string_ref request) const
-        { 
+        {
           namespace qi = boost::spirit::qi;
-           
+
           iterator current = request.begin();
           const iterator end = request.end();
 
@@ -656,7 +656,7 @@ namespace
     boost::iterator_range<iterator> response;
     boost::iterator_range<iterator> stale;
     boost::iterator_range<iterator> uri;
-    boost::iterator_range<iterator> username; 
+    boost::iterator_range<iterator> username;
   }; // auth_message
 
   struct add_challenge
@@ -677,7 +677,7 @@ namespace
         add_field(out, u8"realm", quoted(auth_realm));
         add_field(out, u8"nonce", quoted(nonce));
         add_field(out, u8"stale", is_stale ? ceref("true") : ceref("false"));
-        
+
         fields.push_back(std::make_pair(std::string(server_auth_field), std::move(out)));
       }
     }
@@ -693,13 +693,13 @@ namespace
     rc.m_response_code = 401;
     rc.m_response_comment = u8"Unauthorized";
     rc.m_mime_tipe = u8"text/html";
-    rc.m_body = 
+    rc.m_body =
       u8"<html><head><title>Unauthorized Access</title></head><body><h1>401 Unauthorized</h1></body></html>";
 
     boost::fusion::for_each(
       digest_algorithms, add_challenge{nonce, rc.m_additional_fields, is_stale}
     );
-    
+
     return rc;
   }
 }
@@ -782,4 +782,3 @@ namespace epee
     }
   }
 }
-

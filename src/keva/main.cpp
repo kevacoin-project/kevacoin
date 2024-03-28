@@ -215,13 +215,13 @@ CNameConflictTracker::CNameConflictTracker (CTxMemPool &p)
   : txNameConflicts(std::make_shared<std::vector<CTransactionRef>>()), pool(p)
 {
   pool.NotifyEntryRemoved.connect (
-    boost::bind (&ConflictTrackerNotifyEntryRemoved, this, _1, _2));
+    boost::bind (&ConflictTrackerNotifyEntryRemoved, this, boost::placeholders::_1, boost::placeholders::_2));
 }
 
 CNameConflictTracker::~CNameConflictTracker ()
 {
   pool.NotifyEntryRemoved.disconnect (
-    boost::bind (&ConflictTrackerNotifyEntryRemoved, this, _1, _2));
+    boost::bind (&ConflictTrackerNotifyEntryRemoved, this, boost::placeholders::_1, boost::placeholders::_2));
 }
 
 void
