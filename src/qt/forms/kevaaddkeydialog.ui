@@ -15,16 +15,33 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
             <item>
-                <widget class="QLabel" name="label_1">
-                    <property name="text">
-                        <string>Key</string>
-                    </property>
-                </widget>
+                <layout class="QGridLayout" name="gridKeyLableLayout">
+                    <item column="1">
+                        <widget class="QLabel" name="keyLable">
+                            <property name="text">
+                                <string>Key</string>
+                            </property>
+                            <property name="alignment">
+                                <set>Qt::AlignLeft</set>
+                            </property>
+                        </widget>
+                    </item>
+                    <item column="2">
+                        <widget class="QLabel" name="keyCounter">
+                            <property name="text">
+                                <string/>
+                            </property>
+                            <property name="alignment">
+                                <set>Qt::AlignRight</set>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
             </item>
             <item>
                 <widget class="QLineEdit" name="keyText">
                     <property name="toolTip">
-                        <string>New value</string>
+                        <string>New key</string>
                     </property>
                 </widget>
             </item>
@@ -42,11 +59,28 @@
                 </spacer>
             </item>
             <item>
-                <widget class="QLabel" name="label_2">
-                    <property name="text">
-                        <string>Value</string>
-                    </property>
-                </widget>
+                <layout class="QGridLayout" name="gridValueLableLayout">
+                    <item column="1">
+                        <widget class="QLabel" name="valueLabel">
+                            <property name="text">
+                                <string>Value</string>
+                            </property>
+                            <property name="alignment">
+                                <set>Qt::AlignLeft</set>
+                            </property>
+                        </widget>
+                    </item>
+                    <item column="2">
+                        <widget class="QLabel" name="valueCounter">
+                            <property name="text">
+                                <string/>
+                            </property>
+                            <property name="alignment">
+                                <set>Qt::AlignRight</set>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
             </item>
             <item>
                 <widget class="QPlainTextEdit" name="valueText">

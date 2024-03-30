@@ -49,12 +49,68 @@ void KevaAddKeyDialog::cancel()
 
 void KevaAddKeyDialog::onKeyChanged(const QString& key)
 {
-    bool enabled = key.length() > 0 && ui->valueText->toPlainText().length() > 0;
+    // Calculate current length
+    int keyTextLength   = key.length();
+    int valueTextLength = ui->valueText->toPlainText().length();
+
+    // Update counter value
+    ui->keyCounter->setText(
+        QString::number(
+            keyTextLength
+        ) + "/" + QString::number(
+            255
+        )
+    );
+
+    // Update counter palette
+    QPalette keyCounterPalette = ui->keyCounter->palette();
+
+    keyCounterPalette.setColor(
+        QPalette::WindowText,
+        keyTextLength > 255 ? Qt::red : Qt::darkGreen
+    );
+
+    ui->keyCounter->setPalette(
+        keyCounterPalette
+    );
+
+    // Update button status
+    bool enabled = keyTextLength > 0    && valueTextLength > 0 &&
+                   keyTextLength <= 255 && valueTextLength < MAX_SCRIPT_ELEMENT_SIZE + 1;
+
     ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(enabled);
 }
 
 void KevaAddKeyDialog::onValueChanged()
 {
-    bool enabled = ui->valueText->toPlainText().length() > 0 && ui->keyText->text().length() > 0;
+    // Calculate current length
+    int keyTextLength   = ui->keyText->text().length();
+    int valueTextLength = ui->valueText->toPlainText().length();
+
+    // Update counter value
+    ui->valueCounter->setText(
+        QString::number(
+            valueTextLength
+        ) + "/" + QString::number(
+            MAX_SCRIPT_ELEMENT_SIZE
+        )
+    );
+
+    // Update counter palette
+    QPalette valueCounterPalette = ui->valueCounter->palette();
+
+    valueCounterPalette.setColor(
+        QPalette::WindowText,
+        valueTextLength > MAX_SCRIPT_ELEMENT_SIZE ? Qt::red : Qt::darkGreen
+    );
+
+    ui->valueCounter->setPalette(
+        valueCounterPalette
+    );
+
+    // Update button status
+    bool enabled = keyTextLength > 0    && valueTextLength > 0 &&
+                   keyTextLength <= 255 && valueTextLength < MAX_SCRIPT_ELEMENT_SIZE + 1;
+
     ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(enabled);
 }
