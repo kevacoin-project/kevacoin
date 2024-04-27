@@ -169,6 +169,7 @@ public:
 
         // Note that of those with the service bits flag, most only support a subset of possible options
         vSeeds.emplace_back("dnsseed.kevacoin.org");
+        vSeeds.emplace_back("dnsseed.keva.one");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,45); // K
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
